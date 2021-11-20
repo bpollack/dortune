@@ -1,11 +1,14 @@
 #!/usr/bin/env deno run --allow-read=.
 
-const cleanFortunes = Deno.readTextFileSync("freebsd.fortunes");
-const fortunes = cleanFortunes.split("%").slice(1);
+async function fileFortunes(name: string): Promise<string[]> {
+  const resp = await fetch(new URL(`./${name}`, import.meta.url));
+  return (await resp.text()).split("%").slice(1);
+}
+
+const fortunes = await fileFortunes("freebsd.fortunes");
 
 if (Deno.args.some((a) => a == "-o" || a == "--offensive")) {
-  const dirtyFortunes = Deno.readTextFileSync("offensive.fortunes");
-  fortunes.push(...dirtyFortunes.split("%").slice(1));
+  fortunes.push(...await fileFortunes("offensive.fortunes"));
 }
 
 console.log(fortunes[Math.floor(Math.random() * fortunes.length)].trim());

@@ -1,14 +1,14 @@
 #!/usr/bin/env deno run --allow-read=.
 
-async function fileFortunes(name: string): Promise<string[]> {
+async function readFortunes(name: string): Promise<string[]> {
   const resp = await fetch(new URL(`./${name}`, import.meta.url));
   return (await resp.text()).split("%").slice(1);
 }
 
-const fortunes = await fileFortunes("freebsd.fortunes");
+const fortunes = await readFortunes("freebsd.fortunes");
 
 if (Deno.args.some((a) => a == "-o" || a == "--offensive")) {
-  fortunes.push(...await fileFortunes("offensive.fortunes"));
+  fortunes.push(...await readFortunes("offensive.fortunes"));
 }
 
 console.log(fortunes[Math.floor(Math.random() * fortunes.length)].trim());

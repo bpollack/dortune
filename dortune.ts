@@ -7,7 +7,7 @@ async function readFortunes(name: string): Promise<string[]> {
 
 const fortunes = await readFortunes("freebsd.fortunes");
 
-if (Deno.args.some((a) => a == "-o" || a == "--offensive")) {
+if (Deno.args.some((a) => a === "-o" || a === "--offensive")) {
   fortunes.push(...await readFortunes("offensive.fortunes"));
 }
 
